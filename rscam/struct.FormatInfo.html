@@ -44,15 +44,18 @@
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>rscam</a>::<wbr><a class='struct' href=''>FormatInfo</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-1283' href='../src/rscam/lib.rs.html#40-48'>[src]</a></span></h1>
+        </span><a id='src-1332' href='../src/rscam/lib.rs.html#65-76'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct FormatInfo {
     pub format: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>[<a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>, ..4]</a>,
-    pub desc: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,
+    pub description: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,
     pub compressed: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
     pub emulated: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
     pub modes: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../rscam/struct.ModeInfo.html' title='rscam::ModeInfo'>ModeInfo</a>&gt;,
 }</pre><h2 class='fields'>Fields</h2>
-<table><tr><td id='structfield.format'><a class='stability Unmarked' title='No stability level'></a><code>format</code></td><td></td></tr><tr><td id='structfield.desc'><a class='stability Unmarked' title='No stability level'></a><code>desc</code></td><td></td></tr><tr><td id='structfield.compressed'><a class='stability Unmarked' title='No stability level'></a><code>compressed</code></td><td></td></tr><tr><td id='structfield.emulated'><a class='stability Unmarked' title='No stability level'></a><code>emulated</code></td><td><div class='docblock'><p>Whether it&#39;s transcoded from a different input format.</p>
+<table><tr><td id='structfield.format'><a class='stability Unmarked' title='No stability level'></a><code>format</code></td><td><div class='docblock'><p>FourCC of format (e.g. <code>&quot;H264&quot;</code>).</p>
+</div></td></tr><tr><td id='structfield.description'><a class='stability Unmarked' title='No stability level'></a><code>description</code></td><td><div class='docblock'><p>Information about the format.</p>
+</div></td></tr><tr><td id='structfield.compressed'><a class='stability Unmarked' title='No stability level'></a><code>compressed</code></td><td><div class='docblock'><p>Raw or compressed.</p>
+</div></td></tr><tr><td id='structfield.emulated'><a class='stability Unmarked' title='No stability level'></a><code>emulated</code></td><td><div class='docblock'><p>Whether it&#39;s transcoded from a different input format.</p>
 </div></td></tr><tr><td id='structfield.modes'><a class='stability Unmarked' title='No stability level'></a><code>modes</code></td><td><div class='docblock'><p>Resolutions and intervals for the format.</p>
 </div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Unstable' title='Unstable: I/O and core have yet to be reconciled'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Show.html' title='core::fmt::Show'>Show</a> for <a class='struct' href='../rscam/struct.FormatInfo.html' title='rscam::FormatInfo'>FormatInfo</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><a class='stability Unstable' title='Unstable: I/O and core have yet to be reconciled'></a><code>fn <a href='#method.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
 </div></section>

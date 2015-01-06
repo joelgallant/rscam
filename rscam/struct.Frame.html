@@ -44,14 +44,17 @@
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>rscam</a>::<wbr><a class='struct' href=''>Frame</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-1748' href='../src/rscam/lib.rs.html#111-117'>[src]</a></span></h1>
+        </span><a id='src-1703' href='../src/rscam/lib.rs.html#136-145'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Frame&lt;'a&gt; {
     pub data: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;'a [</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>,
-    pub width: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>,
-    pub height: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>,
+    pub resolution: <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</a>,
+    pub format: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>[<a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>, ..4]</a>,
     // some fields omitted
 }</pre><h2 class='fields'>Fields</h2>
-<table><tr><td id='structfield.data'><a class='stability Unmarked' title='No stability level'></a><code>data</code></td><td></td></tr><tr><td id='structfield.width'><a class='stability Unmarked' title='No stability level'></a><code>width</code></td><td></td></tr><tr><td id='structfield.height'><a class='stability Unmarked' title='No stability level'></a><code>height</code></td><td></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../rscam/struct.Frame.html' title='rscam::Frame'>Frame</a>&lt;'a&gt;</code></h3><div class='impl-items'><h4 id='method.drop' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
+<table><tr><td id='structfield.data'><a class='stability Unmarked' title='No stability level'></a><code>data</code></td><td><div class='docblock'><p>Slice of one of the buffers.</p>
+</div></td></tr><tr><td id='structfield.resolution'><a class='stability Unmarked' title='No stability level'></a><code>resolution</code></td><td><div class='docblock'><p>Width and height of the frame.</p>
+</div></td></tr><tr><td id='structfield.format'><a class='stability Unmarked' title='No stability level'></a><code>format</code></td><td><div class='docblock'><p>FourCC of the format.</p>
+</div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;'a&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../rscam/struct.Frame.html' title='rscam::Frame'>Frame</a>&lt;'a&gt;</code></h3><div class='impl-items'><h4 id='method.drop' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 

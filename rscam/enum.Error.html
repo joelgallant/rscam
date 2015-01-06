@@ -44,14 +44,15 @@
 <h1 class='fqn'><span class='in-band'>Enum <a href='index.html'>rscam</a>::<wbr><a class='enum' href=''>Error</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-1085' href='../src/rscam/lib.rs.html#14-22'>[src]</a></span></h1>
+        </span><a id='src-1109' href='../src/rscam/lib.rs.html#13-22'>[src]</a></span></h1>
 <pre class='rust enum'>pub enum Error {
     Io(<a class='struct' href='http://doc.rust-lang.org/nightly/std/io/struct.IoError.html' title='std::io::IoError'>IoError</a>),
     BadResolution,
     BadFormat,
     BadInterval,
 }</pre><h2 class='variants'>Variants</h2>
-<table><tr><td id='variant.Io'><a class='stability Unmarked' title='No stability level'></a><code>Io</code></td><td></td></tr><tr><td id='variant.BadResolution'><a class='stability Unmarked' title='No stability level'></a><code>BadResolution</code></td><td><div class='docblock'><p>Unsupported resolution (width and/or height).</p>
+<table><tr><td id='variant.Io'><a class='stability Unmarked' title='No stability level'></a><code>Io</code></td><td><div class='docblock'><p>I/O error when using the camera.</p>
+</div></td></tr><tr><td id='variant.BadResolution'><a class='stability Unmarked' title='No stability level'></a><code>BadResolution</code></td><td><div class='docblock'><p>Unsupported resolution (width and/or height).</p>
 </div></td></tr><tr><td id='variant.BadFormat'><a class='stability Unmarked' title='No stability level'></a><code>BadFormat</code></td><td><div class='docblock'><p>Unsupported format of pixel.</p>
 </div></td></tr><tr><td id='variant.BadInterval'><a class='stability Unmarked' title='No stability level'></a><code>BadInterval</code></td><td><div class='docblock'><p>Unsupported frame interval.</p>
 </div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Unstable' title='Unstable'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/std/error/trait.FromError.html' title='std::error::FromError'>FromError</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/std/io/struct.IoError.html' title='std::io::IoError'>IoError</a>&gt; for <a class='enum' href='../rscam/enum.Error.html' title='rscam::Error'>Error</a></code></h3><div class='impl-items'><h4 id='method.from_error' class='method'><a class='stability Unstable' title='Unstable'></a><code>fn <a href='#method.from_error' class='fnname'>from_error</a>(err: <a class='struct' href='http://doc.rust-lang.org/nightly/std/io/struct.IoError.html' title='std::io::IoError'>IoError</a>) -&gt; <a class='enum' href='../rscam/enum.Error.html' title='rscam::Error'>Error</a></code></h4>
