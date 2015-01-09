@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'><a href='index.html'>rscam</a></p><div class='block struct'><h2>Structs</h2><a class='struct ' href='struct.Camera.html'>Camera</a><a class='struct ' href='struct.Config.html'>Config</a><a class='struct ' href='struct.FormatInfo.html'>FormatInfo</a><a class='struct ' href='struct.Frame.html'>Frame</a><a class='struct ' href='struct.ModeInfo.html'>ModeInfo</a></div><div class='block enum'><h2>Enums</h2><a class='enum current' href='enum.Error.html'>Error</a></div><div class='block fn'><h2>Functions</h2><a class='fn ' href='fn.new.html'>new</a></div>
+        <p class='location'><a href='index.html'>rscam</a></p><div class='block struct'><h2>Structs</h2><a class='struct ' href='struct.Camera.html'>Camera</a><a class='struct ' href='struct.Config.html'>Config</a><a class='struct ' href='struct.FormatInfo.html'>FormatInfo</a><a class='struct ' href='struct.Frame.html'>Frame</a></div><div class='block enum'><h2>Enums</h2><a class='enum current' href='enum.Error.html'>Error</a><a class='enum ' href='enum.Field.html'>Field</a><a class='enum ' href='enum.IntervalInfo.html'>IntervalInfo</a><a class='enum ' href='enum.ResolutionInfo.html'>ResolutionInfo</a></div><div class='block fn'><h2>Functions</h2><a class='fn ' href='fn.new.html'>new</a></div>
     </section>
 
     <nav class="sub">
@@ -44,18 +44,20 @@
 <h1 class='fqn'><span class='in-band'>Enum <a href='index.html'>rscam</a>::<wbr><a class='enum' href=''>Error</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-1109' href='../src/rscam/lib.rs.html#13-22'>[src]</a></span></h1>
+        </span><a id='src-1263' href='../src/rscam/lib.rs.html#15-26'>[src]</a></span></h1>
 <pre class='rust enum'>pub enum Error {
     Io(<a class='struct' href='http://doc.rust-lang.org/nightly/std/io/struct.IoError.html' title='std::io::IoError'>IoError</a>),
+    BadInterval,
     BadResolution,
     BadFormat,
-    BadInterval,
+    BadField,
 }</pre><h2 class='variants'>Variants</h2>
 <table><tr><td id='variant.Io'><a class='stability Unmarked' title='No stability level'></a><code>Io</code></td><td><div class='docblock'><p>I/O error when using the camera.</p>
+</div></td></tr><tr><td id='variant.BadInterval'><a class='stability Unmarked' title='No stability level'></a><code>BadInterval</code></td><td><div class='docblock'><p>Unsupported frame interval.</p>
 </div></td></tr><tr><td id='variant.BadResolution'><a class='stability Unmarked' title='No stability level'></a><code>BadResolution</code></td><td><div class='docblock'><p>Unsupported resolution (width and/or height).</p>
 </div></td></tr><tr><td id='variant.BadFormat'><a class='stability Unmarked' title='No stability level'></a><code>BadFormat</code></td><td><div class='docblock'><p>Unsupported format of pixel.</p>
-</div></td></tr><tr><td id='variant.BadInterval'><a class='stability Unmarked' title='No stability level'></a><code>BadInterval</code></td><td><div class='docblock'><p>Unsupported frame interval.</p>
-</div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Unstable' title='Unstable'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/std/error/trait.FromError.html' title='std::error::FromError'>FromError</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/std/io/struct.IoError.html' title='std::io::IoError'>IoError</a>&gt; for <a class='enum' href='../rscam/enum.Error.html' title='rscam::Error'>Error</a></code></h3><div class='impl-items'><h4 id='method.from_error' class='method'><a class='stability Unstable' title='Unstable'></a><code>fn <a href='#method.from_error' class='fnname'>from_error</a>(err: <a class='struct' href='http://doc.rust-lang.org/nightly/std/io/struct.IoError.html' title='std::io::IoError'>IoError</a>) -&gt; <a class='enum' href='../rscam/enum.Error.html' title='rscam::Error'>Error</a></code></h4>
+</div></td></tr><tr><td id='variant.BadField'><a class='stability Unmarked' title='No stability level'></a><code>BadField</code></td><td><div class='docblock'><p>Unsupported field.</p>
+</div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Unmarked' title='No stability level'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/std/error/trait.FromError.html' title='std::error::FromError'>FromError</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/std/io/struct.IoError.html' title='std::io::IoError'>IoError</a>&gt; for <a class='enum' href='../rscam/enum.Error.html' title='rscam::Error'>Error</a></code></h3><div class='impl-items'><h4 id='method.from_error' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.from_error' class='fnname'>from_error</a>(err: <a class='struct' href='http://doc.rust-lang.org/nightly/std/io/struct.IoError.html' title='std::io::IoError'>IoError</a>) -&gt; <a class='enum' href='../rscam/enum.Error.html' title='rscam::Error'>Error</a></code></h4>
 </div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><a class='stability Unstable' title='Unstable: I/O and core have yet to be reconciled'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Show.html' title='core::fmt::Show'>Show</a> for <a class='enum' href='../rscam/enum.Error.html' title='rscam::Error'>Error</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><a class='stability Unstable' title='Unstable: I/O and core have yet to be reconciled'></a><code>fn <a href='#method.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
