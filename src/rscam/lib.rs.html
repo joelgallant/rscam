@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/workspace/rscam/src/lib.rs`.">
+    <meta name="description" content="Source to the Rust file `src/lib.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>lib.rs.html -- source</title>
@@ -548,12 +548,12 @@
 <span id="506">506</span>
 <span id="507">507</span>
 </pre><pre class='rust '>
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>slicing_syntax</span>)]</span>
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>unsafe_destructor</span>)]</span>
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>libc</span>, <span class='ident'>std_misc</span>, <span class='ident'>os</span>, <span class='ident'>core</span>, <span class='ident'>collections</span>)]</span>
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>slicing_syntax</span>, <span class='ident'>unsafe_destructor</span>)]</span>
 
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>libc</span>;
 
-<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>io</span>, <span class='ident'>fmt</span>, <span class='ident'>str</span>, <span class='ident'>error</span>, <span class='ident'>default</span>, <span class='ident'>result</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>old_io</span>, <span class='ident'>fmt</span>, <span class='ident'>str</span>, <span class='ident'>error</span>, <span class='ident'>default</span>, <span class='ident'>result</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>Fd</span>;
 
 <span class='kw'>mod</span> <span class='ident'>v4l2</span>;
@@ -564,7 +564,7 @@
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Show</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>Error</span> {
     <span class='doccomment'>/// I/O error when using the camera.</span>
-    <span class='ident'>Io</span>(<span class='ident'>io</span>::<span class='ident'>IoError</span>),
+    <span class='ident'>Io</span>(<span class='ident'>old_io</span>::<span class='ident'>IoError</span>),
     <span class='doccomment'>/// Unsupported frame interval.</span>
     <span class='ident'>BadInterval</span>,
     <span class='doccomment'>/// Unsupported resolution (width and/or height).</span>
@@ -575,8 +575,8 @@
     <span class='ident'>BadField</span>
 }
 
-<span class='kw'>impl</span> <span class='ident'>error</span>::<span class='ident'>FromError</span><span class='op'>&lt;</span><span class='ident'>io</span>::<span class='ident'>IoError</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Error</span> {
-    <span class='kw'>fn</span> <span class='ident'>from_error</span>(<span class='ident'>err</span>: <span class='ident'>io</span>::<span class='ident'>IoError</span>) <span class='op'>-&gt;</span> <span class='ident'>Error</span> {
+<span class='kw'>impl</span> <span class='ident'>error</span>::<span class='ident'>FromError</span><span class='op'>&lt;</span><span class='ident'>old_io</span>::<span class='ident'>IoError</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Error</span> {
+    <span class='kw'>fn</span> <span class='ident'>from_error</span>(<span class='ident'>err</span>: <span class='ident'>old_io</span>::<span class='ident'>IoError</span>) <span class='op'>-&gt;</span> <span class='ident'>Error</span> {
         <span class='ident'>Error</span>::<span class='ident'>Io</span>(<span class='ident'>err</span>)
     }
 }
@@ -659,7 +659,7 @@
             ],
 
             <span class='ident'>description</span>: <span class='ident'>String</span>::<span class='ident'>from_utf8_lossy</span>(<span class='kw'>match</span> <span class='ident'>desc</span>.<span class='ident'>position_elem</span>(<span class='kw-2'>&amp;</span><span class='number'>0</span>) {
-                <span class='prelude-val'>Some</span>(<span class='ident'>x</span>) <span class='op'>=&gt;</span> <span class='ident'>desc</span>.<span class='ident'>slice_to</span>(<span class='ident'>x</span>),
+                <span class='prelude-val'>Some</span>(<span class='ident'>x</span>) <span class='op'>=&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>desc</span>[..<span class='ident'>x</span>],
                 <span class='prelude-val'>None</span>    <span class='op'>=&gt;</span> <span class='ident'>desc</span>
             }).<span class='ident'>into_owned</span>(),
 
@@ -673,7 +673,7 @@
     }
 }
 
-<span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Show</span> <span class='kw'>for</span> <span class='ident'>FormatInfo</span> {
+<span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Debug</span> <span class='kw'>for</span> <span class='ident'>FormatInfo</span> {
     <span class='kw'>fn</span> <span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>f</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Formatter</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
         <span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>f</span>, <span class='string'>&quot;{} ({}{})&quot;</span>, <span class='ident'>str</span>::<span class='ident'>from_utf8</span>(<span class='self'>self</span>.<span class='ident'>format</span>.<span class='ident'>as_slice</span>()).<span class='ident'>unwrap</span>(),
             <span class='self'>self</span>.<span class='ident'>description</span>, <span class='kw'>match</span> (<span class='self'>self</span>.<span class='ident'>compressed</span>, <span class='self'>self</span>.<span class='ident'>emulated</span>) {
@@ -694,13 +694,13 @@
     }
 }
 
-<span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Show</span> <span class='kw'>for</span> <span class='ident'>ResolutionInfo</span> {
+<span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Debug</span> <span class='kw'>for</span> <span class='ident'>ResolutionInfo</span> {
     <span class='kw'>fn</span> <span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>f</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Formatter</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
         <span class='kw'>match</span> <span class='op'>*</span><span class='self'>self</span> {
             <span class='ident'>ResolutionInfo</span>::<span class='ident'>Discretes</span>(<span class='kw-2'>ref</span> <span class='ident'>d</span>) <span class='op'>=&gt;</span> {
                 <span class='macro'>try</span><span class='macro'>!</span>(<span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>f</span>, <span class='string'>&quot;Discretes: {}x{}&quot;</span>, <span class='ident'>d</span>[<span class='number'>0</span>].<span class='number'>0</span>, <span class='ident'>d</span>[<span class='number'>0</span>].<span class='number'>1</span>));
 
-                <span class='kw'>for</span> <span class='ident'>res</span> <span class='kw'>in</span> <span class='ident'>d</span>.<span class='ident'>slice_from</span>(<span class='number'>1</span>).<span class='ident'>iter</span>() {
+                <span class='kw'>for</span> <span class='ident'>res</span> <span class='kw'>in</span> (<span class='kw-2'>&amp;</span><span class='ident'>d</span>[<span class='number'>1</span>..]).<span class='ident'>iter</span>() {
                     <span class='macro'>try</span><span class='macro'>!</span>(<span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>f</span>, <span class='string'>&quot;, {}x{}&quot;</span>, <span class='ident'>res</span>.<span class='number'>0</span>, <span class='ident'>res</span>.<span class='number'>1</span>));
                 }
 
@@ -722,13 +722,13 @@
     }
 }
 
-<span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Show</span> <span class='kw'>for</span> <span class='ident'>IntervalInfo</span> {
+<span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Debug</span> <span class='kw'>for</span> <span class='ident'>IntervalInfo</span> {
     <span class='kw'>fn</span> <span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>f</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Formatter</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
         <span class='kw'>match</span> <span class='op'>*</span><span class='self'>self</span> {
             <span class='ident'>IntervalInfo</span>::<span class='ident'>Discretes</span>(<span class='kw-2'>ref</span> <span class='ident'>d</span>) <span class='op'>=&gt;</span> {
                 <span class='macro'>try</span><span class='macro'>!</span>(<span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>f</span>, <span class='string'>&quot;Discretes: {}fps&quot;</span>, <span class='ident'>d</span>[<span class='number'>0</span>].<span class='number'>1</span><span class='op'>/</span><span class='ident'>d</span>[<span class='number'>0</span>].<span class='number'>0</span>));
 
-                <span class='kw'>for</span> <span class='ident'>res</span> <span class='kw'>in</span> <span class='ident'>d</span>.<span class='ident'>slice_from</span>(<span class='number'>1</span>).<span class='ident'>iter</span>() {
+                <span class='kw'>for</span> <span class='ident'>res</span> <span class='kw'>in</span> (<span class='kw-2'>&amp;</span><span class='ident'>d</span>[<span class='number'>1</span>..]).<span class='ident'>iter</span>() {
                     <span class='macro'>try</span><span class='macro'>!</span>(<span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>f</span>, <span class='string'>&quot;, {}fps&quot;</span>, <span class='ident'>res</span>.<span class='number'>1</span><span class='op'>/</span><span class='ident'>res</span>.<span class='number'>0</span>));
                 }
 
@@ -776,7 +776,7 @@
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>Camera</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>device</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='ident'>Camera</span><span class='op'>&gt;</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>device</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='ident'>Camera</span><span class='op'>&gt;</span> {
         <span class='prelude-val'>Ok</span>(<span class='ident'>Camera</span> {
             <span class='ident'>fd</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>v4l2</span>::<span class='ident'>open</span>(<span class='ident'>device</span>)),
             <span class='ident'>state</span>: <span class='ident'>State</span>::<span class='ident'>Idle</span>,
@@ -787,7 +787,7 @@
     }
 
     <span class='doccomment'>/// Get detailed info about the available formats.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>formats</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>FormatInfo</span><span class='op'>&gt;&gt;</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>formats</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>FormatInfo</span><span class='op'>&gt;&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>formats</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[];
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>fmt</span> <span class='op'>=</span> <span class='ident'>v4l2</span>::<span class='ident'>FmtDesc</span>::<span class='ident'>new</span>();
 
@@ -914,7 +914,7 @@
      * # Panics
      * If called w/o streaming.
      */</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>capture</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='ident'>Frame</span><span class='op'>&gt;</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>capture</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='ident'>Frame</span><span class='op'>&gt;</span> {
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>state</span>, <span class='ident'>State</span>::<span class='ident'>Streaming</span>);
 
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>buf</span> <span class='op'>=</span> <span class='ident'>v4l2</span>::<span class='ident'>Buffer</span>::<span class='ident'>new</span>();
@@ -923,7 +923,7 @@
         <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>buf</span>.<span class='ident'>index</span> <span class='op'>&lt;</span> <span class='self'>self</span>.<span class='ident'>buffers</span>.<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>u32</span>);
 
         <span class='prelude-val'>Ok</span>(<span class='ident'>Frame</span> {
-            <span class='ident'>data</span>: <span class='self'>self</span>.<span class='ident'>buffers</span>[<span class='ident'>buf</span>.<span class='ident'>index</span> <span class='kw'>as</span> <span class='ident'>uint</span>].<span class='ident'>slice_to</span>(<span class='ident'>buf</span>.<span class='ident'>bytesused</span> <span class='kw'>as</span> <span class='ident'>uint</span>),
+            <span class='ident'>data</span>: <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>buffers</span>[<span class='ident'>buf</span>.<span class='ident'>index</span> <span class='kw'>as</span> <span class='ident'>usize</span>][..<span class='ident'>buf</span>.<span class='ident'>bytesused</span> <span class='kw'>as</span> <span class='ident'>usize</span>],
             <span class='ident'>resolution</span>: <span class='self'>self</span>.<span class='ident'>resolution</span>,
             <span class='ident'>format</span>: <span class='self'>self</span>.<span class='ident'>format</span>,
             <span class='ident'>fd</span>: <span class='self'>self</span>.<span class='ident'>fd</span>,
@@ -937,7 +937,7 @@
      * # Panics
      * If called w/o streaming.
      */</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>stop</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>stop</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>state</span>, <span class='ident'>State</span>::<span class='ident'>Streaming</span>);
 
         <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>streamoff</span>());
@@ -996,7 +996,7 @@
             <span class='ident'>buf</span>.<span class='ident'>index</span> <span class='op'>=</span> <span class='ident'>i</span>;
             <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>v4l2</span>::<span class='ident'>xioctl</span>(<span class='self'>self</span>.<span class='ident'>fd</span>, <span class='ident'>v4l2</span>::<span class='ident'>VIDIOC_QUERYBUF</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buf</span>));
 
-            <span class='kw'>let</span> <span class='ident'>region</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>v4l2</span>::<span class='ident'>mmap</span>(<span class='ident'>buf</span>.<span class='ident'>length</span> <span class='kw'>as</span> <span class='ident'>uint</span>, <span class='self'>self</span>.<span class='ident'>fd</span>, <span class='ident'>buf</span>.<span class='ident'>m</span>));
+            <span class='kw'>let</span> <span class='ident'>region</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>v4l2</span>::<span class='ident'>mmap</span>(<span class='ident'>buf</span>.<span class='ident'>length</span> <span class='kw'>as</span> <span class='ident'>usize</span>, <span class='self'>self</span>.<span class='ident'>fd</span>, <span class='ident'>buf</span>.<span class='ident'>m</span>));
 
             <span class='self'>self</span>.<span class='ident'>buffers</span>.<span class='ident'>push</span>(<span class='ident'>region</span>);
         }
@@ -1004,7 +1004,7 @@
         <span class='prelude-val'>Ok</span>(())
     }
 
-    <span class='kw'>fn</span> <span class='ident'>free_buffers</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>free_buffers</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>res</span> <span class='op'>=</span> <span class='prelude-val'>Ok</span>(());
 
         <span class='kw'>for</span> <span class='ident'>buffer</span> <span class='kw'>in</span> <span class='self'>self</span>.<span class='ident'>buffers</span>.<span class='ident'>iter_mut</span>() {
@@ -1017,7 +1017,7 @@
         <span class='ident'>res</span>
     }
 
-    <span class='kw'>fn</span> <span class='ident'>streamon</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>streamon</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
         <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='ident'>range</span>(<span class='number'>0</span>, <span class='self'>self</span>.<span class='ident'>buffers</span>.<span class='ident'>len</span>()) {
             <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>buf</span> <span class='op'>=</span> <span class='ident'>v4l2</span>::<span class='ident'>Buffer</span>::<span class='ident'>new</span>();
             <span class='ident'>buf</span>.<span class='ident'>index</span> <span class='op'>=</span> <span class='ident'>i</span> <span class='kw'>as</span> <span class='ident'>u32</span>;
@@ -1031,7 +1031,7 @@
         <span class='prelude-val'>Ok</span>(())
     }
 
-    <span class='kw'>fn</span> <span class='ident'>streamoff</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>streamoff</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>typ</span> <span class='op'>=</span> <span class='ident'>v4l2</span>::<span class='ident'>BUF_TYPE_VIDEO_CAPTURE</span>;
         <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>v4l2</span>::<span class='ident'>xioctl</span>(<span class='self'>self</span>.<span class='ident'>fd</span>, <span class='ident'>v4l2</span>::<span class='ident'>VIDIOC_STREAMOFF</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>typ</span>));
 
@@ -1052,7 +1052,7 @@
 }
 
 <span class='doccomment'>/// Alias for `Camera::new()`.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>device</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='ident'>Camera</span><span class='op'>&gt;</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>device</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='ident'>Camera</span><span class='op'>&gt;</span> {
     <span class='ident'>Camera</span>::<span class='ident'>new</span>(<span class='ident'>device</span>)
 }
 </pre>

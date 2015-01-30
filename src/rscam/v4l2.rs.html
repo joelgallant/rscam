@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/workspace/rscam/src/v4l2.rs`.">
+    <meta name="description" content="Source to the Rust file `src/v4l2.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>v4l2.rs.html -- source</title>
@@ -499,7 +499,7 @@
 <span id="457">457</span>
 <span id="458">458</span>
 </pre><pre class='rust '>
-<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>io</span>, <span class='ident'>os</span>, <span class='ident'>raw</span>, <span class='ident'>mem</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>old_io</span>, <span class='ident'>os</span>, <span class='ident'>raw</span>, <span class='ident'>mem</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>Fd</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::<span class='ident'>CString</span>;
 
@@ -547,24 +547,24 @@
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>check</span>(
     (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>cond</span>:<span class='ident'>expr</span>) <span class='op'>=&gt;</span>
         (<span class='macro'>try</span><span class='macro'>!</span>(<span class='kw'>match</span> <span class='op'>!</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>cond</span> <span class='op'>&amp;&amp;</span> <span class='ident'>os</span>::<span class='ident'>errno</span>() <span class='op'>&gt;</span> <span class='number'>0</span> {
-            <span class='boolval'>true</span>  <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>IoError</span>::<span class='ident'>last_error</span>()),
+            <span class='boolval'>true</span>  <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>old_io</span>::<span class='ident'>IoError</span>::<span class='ident'>last_error</span>()),
             <span class='boolval'>false</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(())
         }))
 );
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>open</span>(<span class='ident'>file</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='ident'>Fd</span><span class='op'>&gt;</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>open</span>(<span class='ident'>file</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='ident'>Fd</span><span class='op'>&gt;</span> {
     <span class='kw'>let</span> <span class='ident'>c_str</span> <span class='op'>=</span> <span class='ident'>CString</span>::<span class='ident'>from_slice</span>(<span class='ident'>file</span>.<span class='ident'>as_bytes</span>());
     <span class='kw'>let</span> <span class='ident'>fd</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ll</span>::<span class='ident'>open</span>(<span class='ident'>c_str</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>O_RDWR</span>, <span class='number'>0</span>) <span class='kw'>as</span> <span class='ident'>Fd</span> };
     <span class='macro'>check</span><span class='macro'>!</span>(<span class='ident'>fd</span> <span class='op'>!=</span> <span class='op'>-</span><span class='number'>1</span>);
     <span class='prelude-val'>Ok</span>(<span class='ident'>fd</span>)
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>close</span>(<span class='ident'>fd</span>: <span class='ident'>Fd</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>close</span>(<span class='ident'>fd</span>: <span class='ident'>Fd</span>) <span class='op'>-&gt;</span> <span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
     <span class='macro'>check</span><span class='macro'>!</span>(<span class='kw'>unsafe</span> { <span class='ident'>ll</span>::<span class='ident'>close</span>(<span class='ident'>fd</span>) <span class='op'>!=</span> <span class='op'>-</span><span class='number'>1</span> });
     <span class='prelude-val'>Ok</span>(())
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>xioctl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>fd</span>: <span class='ident'>Fd</span>, <span class='ident'>request</span>: <span class='ident'>uint</span>, <span class='ident'>arg</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>xioctl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>fd</span>: <span class='ident'>Fd</span>, <span class='ident'>request</span>: <span class='ident'>usize</span>, <span class='ident'>arg</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
     <span class='kw'>let</span> <span class='ident'>argp</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>T</span> <span class='op'>=</span> <span class='ident'>arg</span>;
 
     <span class='macro'>check</span><span class='macro'>!</span>(<span class='kw'>unsafe</span> {
@@ -572,7 +572,7 @@
 
         <span class='kw'>loop</span> {
             <span class='ident'>ok</span> <span class='op'>=</span> <span class='ident'>ll</span>::<span class='ident'>ioctl</span>(<span class='ident'>fd</span>, <span class='ident'>request</span> <span class='kw'>as</span> <span class='ident'>c_ulong</span>, <span class='ident'>argp</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>) <span class='op'>!=</span> <span class='op'>-</span><span class='number'>1</span>;
-            <span class='kw'>if</span> <span class='ident'>ok</span> <span class='op'>||</span> <span class='ident'>os</span>::<span class='ident'>errno</span>() <span class='op'>!=</span> <span class='ident'>EINTR</span> <span class='kw'>as</span> <span class='ident'>uint</span> {
+            <span class='kw'>if</span> <span class='ident'>ok</span> <span class='op'>||</span> <span class='ident'>os</span>::<span class='ident'>errno</span>() <span class='op'>!=</span> <span class='ident'>EINTR</span> <span class='kw'>as</span> <span class='ident'>usize</span> {
                 <span class='kw'>break</span>;
             }
         }
@@ -583,15 +583,15 @@
     <span class='prelude-val'>Ok</span>(())
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>xioctl_valid</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>fd</span>: <span class='ident'>Fd</span>, <span class='ident'>request</span>: <span class='ident'>uint</span>, <span class='ident'>arg</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='ident'>bool</span><span class='op'>&gt;</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>xioctl_valid</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>(<span class='ident'>fd</span>: <span class='ident'>Fd</span>, <span class='ident'>request</span>: <span class='ident'>usize</span>, <span class='ident'>arg</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>T</span>) <span class='op'>-&gt;</span><span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='ident'>bool</span><span class='op'>&gt;</span> {
     <span class='kw'>match</span> <span class='ident'>xioctl</span>(<span class='ident'>fd</span>, <span class='ident'>request</span>, <span class='ident'>arg</span>) {
-        <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>IoError</span> { <span class='ident'>kind</span>: <span class='ident'>io</span>::<span class='ident'>InvalidInput</span>, .. }) <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='boolval'>false</span>),
+        <span class='prelude-val'>Err</span>(<span class='ident'>old_io</span>::<span class='ident'>IoError</span> { <span class='ident'>kind</span>: <span class='ident'>old_io</span>::<span class='ident'>InvalidInput</span>, .. }) <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='boolval'>false</span>),
         <span class='prelude-val'>Err</span>(<span class='ident'>err</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>err</span>),
         <span class='prelude-val'>Ok</span>(_) <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='boolval'>true</span>)
     }
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>mmap</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='ident'>length</span>: <span class='ident'>uint</span>, <span class='ident'>fd</span>: <span class='ident'>Fd</span>, <span class='ident'>offset</span>: <span class='ident'>uint</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> [<span class='ident'>u8</span>]<span class='op'>&gt;</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>mmap</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='ident'>length</span>: <span class='ident'>usize</span>, <span class='ident'>fd</span>: <span class='ident'>Fd</span>, <span class='ident'>offset</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> [<span class='ident'>u8</span>]<span class='op'>&gt;</span> {
     <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ll</span>::<span class='ident'>mmap</span>(<span class='number'>0</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>, <span class='ident'>length</span> <span class='kw'>as</span> <span class='ident'>size_t</span>, <span class='ident'>PROT_READ</span><span class='op'>|</span><span class='ident'>PROT_WRITE</span>,
                                  <span class='ident'>MAP_SHARED</span>, <span class='ident'>fd</span>, <span class='ident'>offset</span> <span class='kw'>as</span> <span class='ident'>off_t</span>) <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>u8</span> };
 
@@ -599,7 +599,7 @@
     <span class='prelude-val'>Ok</span>(<span class='kw'>unsafe</span> { <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>raw</span>::<span class='ident'>Slice</span> { <span class='ident'>data</span>: <span class='ident'>ptr</span>, <span class='ident'>len</span>: <span class='ident'>length</span>}) })
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>munmap</span>(<span class='ident'>region</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> [<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>munmap</span>(<span class='ident'>region</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> [<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>old_io</span>::<span class='ident'>IoResult</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
     <span class='macro'>check</span><span class='macro'>!</span>(<span class='kw'>unsafe</span> {
         <span class='ident'>ll</span>::<span class='ident'>munmap</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>region</span>[<span class='number'>0</span>] <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>u8</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>, <span class='ident'>region</span>.<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>size_t</span>) <span class='op'>==</span> <span class='number'>0</span>
     });
@@ -610,14 +610,14 @@
 <span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Format</span> {
     <span class='kw'>pub</span> <span class='ident'>ftype</span>: <span class='ident'>u32</span>,
-    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_word_size</span><span class='op'>=</span><span class='string'>&quot;64&quot;</span>)]</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_pointer_width</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>)]</span>
     <span class='ident'>padding</span>: <span class='ident'>u32</span>,
     <span class='kw'>pub</span> <span class='ident'>fmt</span>: <span class='ident'>PixFormat</span>,
     <span class='ident'>space</span>: [<span class='ident'>u8</span>; <span class='number'>156</span>]
 }
 
 <span class='kw'>impl</span> <span class='ident'>Format</span> {
-    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_word_size</span><span class='op'>=</span><span class='string'>&quot;64&quot;</span>)]</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_pointer_width</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>)]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>resolution</span>: (<span class='ident'>u32</span>, <span class='ident'>u32</span>), <span class='ident'>fourcc</span>: <span class='ident'>u32</span>, <span class='ident'>field</span>: <span class='ident'>u32</span>) <span class='op'>-&gt;</span> <span class='ident'>Format</span> {
         <span class='ident'>Format</span> {
             <span class='ident'>ftype</span>: <span class='ident'>BUF_TYPE_VIDEO_CAPTURE</span>,
@@ -627,7 +627,7 @@
         }
     }
 
-    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_word_size</span><span class='op'>=</span><span class='string'>&quot;32&quot;</span>)]</span>
+    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_pointer_width</span> <span class='op'>=</span> <span class='string'>&quot;32&quot;</span>)]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>resolution</span>: (<span class='ident'>u32</span>, <span class='ident'>u32</span>), <span class='ident'>fourcc</span>: <span class='ident'>u32</span>, <span class='ident'>field</span>: <span class='ident'>u32</span>) <span class='op'>-&gt;</span> <span class='ident'>Format</span> {
         <span class='ident'>Format</span> {
             <span class='ident'>ftype</span>: <span class='ident'>BUF_TYPE_VIDEO_CAPTURE</span>,
@@ -700,7 +700,7 @@
     <span class='kw'>pub</span> <span class='ident'>timecode</span>: <span class='ident'>TimeCode</span>,
     <span class='kw'>pub</span> <span class='ident'>sequence</span>: <span class='ident'>u32</span>,
     <span class='kw'>pub</span> <span class='ident'>memory</span>: <span class='ident'>u32</span>,
-    <span class='kw'>pub</span> <span class='ident'>m</span>: <span class='ident'>uint</span>,   <span class='comment'>// offset (__u32) or userptr (ulong)</span>
+    <span class='kw'>pub</span> <span class='ident'>m</span>: <span class='ident'>usize</span>,   <span class='comment'>// offset (__u32) or userptr (ulong)</span>
     <span class='kw'>pub</span> <span class='ident'>length</span>: <span class='ident'>u32</span>,
     <span class='kw'>pub</span> <span class='ident'>input</span>: <span class='ident'>u32</span>,
     <span class='ident'>reserved</span>: <span class='ident'>u32</span>
@@ -834,11 +834,11 @@
         }
     }
 
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>discrete</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>FrmsizeDiscrete</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>discrete</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>FrmsizeDiscrete</span> {
         <span class='kw'>unsafe</span> { <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>as_mut_ptr</span>()) }
     }
 
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>stepwise</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>FrmsizeStepwise</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>stepwise</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>FrmsizeStepwise</span> {
         <span class='kw'>unsafe</span> { <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>as_mut_ptr</span>()) }
     }
 }
@@ -885,11 +885,11 @@
         }
     }
 
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>discrete</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>Fract</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>discrete</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Fract</span> {
         <span class='kw'>unsafe</span> { <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>as_mut_ptr</span>()) }
     }
 
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>stepwise</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>FrmivalStepwise</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>stepwise</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>FrmivalStepwise</span> {
         <span class='kw'>unsafe</span> { <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>as_mut_ptr</span>()) }
     }
 }
@@ -910,43 +910,43 @@
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>MEMORY_MMAP</span>: <span class='ident'>u32</span> <span class='op'>=</span> <span class='number'>1</span>;
 
 <span class='comment'>// IOCTL codes.</span>
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_ENUM_FMT</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>3225441794</span>;
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_ENUM_FRAMEINTERVALS</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>3224655435</span>;
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_ENUM_FRAMESIZES</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>3224131146</span>;
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_REQBUFS</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>3222558216</span>;
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_S_PARM</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>3234616854</span>;
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_STREAMOFF</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>1074026003</span>;
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_STREAMON</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>1074026002</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_ENUM_FMT</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>3225441794</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_ENUM_FRAMEINTERVALS</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>3224655435</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_ENUM_FRAMESIZES</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>3224131146</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_REQBUFS</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>3222558216</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_S_PARM</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>3234616854</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_STREAMOFF</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>1074026003</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_STREAMON</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>1074026002</span>;
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_word_size</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_DQBUF</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>3227014673</span>;
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_word_size</span> <span class='op'>=</span> <span class='string'>&quot;32&quot;</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_DQBUF</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>3225703953</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_pointer_width</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_DQBUF</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>3227014673</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_pointer_width</span> <span class='op'>=</span> <span class='string'>&quot;32&quot;</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_DQBUF</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>3225703953</span>;
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_word_size</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_QBUF</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>3227014671</span>;
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_word_size</span> <span class='op'>=</span> <span class='string'>&quot;32&quot;</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_QBUF</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>3225703951</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_pointer_width</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_QBUF</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>3227014671</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_pointer_width</span> <span class='op'>=</span> <span class='string'>&quot;32&quot;</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_QBUF</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>3225703951</span>;
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_word_size</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_QUERYBUF</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>3227014665</span>;
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_word_size</span> <span class='op'>=</span> <span class='string'>&quot;32&quot;</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_QUERYBUF</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>3225703945</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_pointer_width</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_QUERYBUF</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>3227014665</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_pointer_width</span> <span class='op'>=</span> <span class='string'>&quot;32&quot;</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_QUERYBUF</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>3225703945</span>;
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_word_size</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_S_FMT</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>3234878981</span>;
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_word_size</span> <span class='op'>=</span> <span class='string'>&quot;32&quot;</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_S_FMT</span>: <span class='ident'>uint</span> <span class='op'>=</span> <span class='number'>3234616837</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_pointer_width</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_S_FMT</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>3234878981</span>;
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_pointer_width</span> <span class='op'>=</span> <span class='string'>&quot;32&quot;</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>VIDIOC_S_FMT</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>3234616837</span>;
 
 <span class='attribute'>#[<span class='ident'>test</span>]</span>
 <span class='kw'>fn</span> <span class='ident'>test_sizes</span>() {
-    <span class='kw'>if</span> <span class='macro'>cfg</span><span class='macro'>!</span>(<span class='ident'>target_word_size</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>) {
+    <span class='kw'>if</span> <span class='macro'>cfg</span><span class='macro'>!</span>(<span class='ident'>target_pointer_width</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>) {
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>mem</span>::<span class='ident'>size_of</span>::<span class='op'>&lt;</span><span class='ident'>Format</span><span class='op'>&gt;</span>(), <span class='number'>208</span>);
     } <span class='kw'>else</span> {
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>mem</span>::<span class='ident'>size_of</span>::<span class='op'>&lt;</span><span class='ident'>Format</span><span class='op'>&gt;</span>(), <span class='number'>204</span>);
     }
 
-    <span class='kw'>if</span> <span class='macro'>cfg</span><span class='macro'>!</span>(<span class='ident'>target_word_size</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>) {
+    <span class='kw'>if</span> <span class='macro'>cfg</span><span class='macro'>!</span>(<span class='ident'>target_pointer_width</span> <span class='op'>=</span> <span class='string'>&quot;64&quot;</span>) {
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>mem</span>::<span class='ident'>size_of</span>::<span class='op'>&lt;</span><span class='ident'>Buffer</span><span class='op'>&gt;</span>(), <span class='number'>88</span>);
     } <span class='kw'>else</span> {
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>mem</span>::<span class='ident'>size_of</span>::<span class='op'>&lt;</span><span class='ident'>Buffer</span><span class='op'>&gt;</span>(), <span class='number'>68</span>);
