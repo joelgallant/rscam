@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'><a href='index.html'>rscam</a></p><div class='block struct'><h2>Structs</h2><a class='struct current' href='struct.Camera.html' title=''>Camera</a><a class='struct ' href='struct.Config.html' title=''>Config</a><a class='struct ' href='struct.FormatInfo.html' title=''>FormatInfo</a><a class='struct ' href='struct.Frame.html' title=''>Frame</a></div><div class='block enum'><h2>Enums</h2><a class='enum ' href='enum.Error.html' title=''>Error</a><a class='enum ' href='enum.Field.html' title='[Details](http://linuxtv.org/downloads/v4l-dvb-apis/field-order.html#v4l2-field).'>Field</a><a class='enum ' href='enum.IntervalInfo.html' title=''>IntervalInfo</a><a class='enum ' href='enum.ResolutionInfo.html' title=''>ResolutionInfo</a></div><div class='block fn'><h2>Functions</h2><a class='fn ' href='fn.new.html' title='Alias for `Camera::new()`.'>new</a></div>
+        <p class='location'><a href='index.html'>rscam</a></p><script>window.sidebarCurrent = {name: 'Camera', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </section>
 
     <nav class="sub">
@@ -42,13 +42,12 @@
 
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>rscam</a>::<wbr><a class='struct' href=''>Camera</a><wbr></span><span class='out-of-band'><span id='render-detail'>
-            <a id="collapse-all" href="#">[-]
-            </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-2592' href='../src/rscam/lib.rs.html#220-226'>[src]</a></span></h1>
+            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-2168' href='../src/rscam/lib.rs.html#220-226'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Camera&lt;'a&gt; {
     // some fields omitted
-}</pre><h2 id='methods'>Methods</h2><h3 class='impl'><a class='stability Unmarked' title='No stability level'></a><code>impl&lt;'a&gt; <a class='struct' href='../rscam/struct.Camera.html' title='rscam::Camera'>Camera</a>&lt;'a&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.new' class='fnname'>new</a>(device: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/old_io/type.IoResult.html' title='std::old_io::IoResult'>IoResult</a>&lt;<a class='struct' href='../rscam/struct.Camera.html' title='rscam::Camera'>Camera</a>&gt;</code></h4>
-<h4 id='method.formats' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.formats' class='fnname'>formats</a>(&amp;self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/old_io/type.IoResult.html' title='std::old_io::IoResult'>IoResult</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../rscam/struct.FormatInfo.html' title='rscam::FormatInfo'>FormatInfo</a>&gt;&gt;</code></h4>
+}</pre><h2 id='methods'>Methods</h2><h3 class='impl'><a class='stability Unmarked' title='No stability level'></a><code>impl&lt;'a&gt; <a class='struct' href='../rscam/struct.Camera.html' title='rscam::Camera'>Camera</a>&lt;'a&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.new' class='fnname'>new</a>(device: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='struct' href='../rscam/struct.Camera.html' title='rscam::Camera'>Camera</a>&gt;</code></h4>
+<h4 id='method.formats' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.formats' class='fnname'>formats</a>(&amp;self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../rscam/struct.FormatInfo.html' title='rscam::FormatInfo'>FormatInfo</a>&gt;&gt;</code></h4>
 <div class='docblock'><p>Get detailed info about the available formats.</p>
 </div><h4 id='method.resolutions' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.resolutions' class='fnname'>resolutions</a>(&amp;self, format: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='type' href='../rscam/type.Result.html' title='rscam::Result'>Result</a>&lt;<a class='enum' href='../rscam/enum.ResolutionInfo.html' title='rscam::ResolutionInfo'>ResolutionInfo</a>&gt;</code></h4>
 <div class='docblock'><p>Get detailed info about the available resolutions.</p>
@@ -59,15 +58,15 @@
 
 <h1 id="panics" class='section-header'><a
                            href="#panics">Panics</a></h1>
-<p>if recalled or called after <code>stop()</code>.</p>
-</div><h4 id='method.capture' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.capture' class='fnname'>capture</a>(&amp;self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/old_io/type.IoResult.html' title='std::old_io::IoResult'>IoResult</a>&lt;<a class='struct' href='../rscam/struct.Frame.html' title='rscam::Frame'>Frame</a>&gt;</code></h4>
+<p>If recalled or called after <code>stop()</code>.</p>
+</div><h4 id='method.capture' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.capture' class='fnname'>capture</a>(&amp;self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='struct' href='../rscam/struct.Frame.html' title='rscam::Frame'>Frame</a>&gt;</code></h4>
 <div class='docblock'><p>Blocking request of frame.
 It dequeues buffer from a driver, which will be enqueueed after destructing <code>Frame</code>.</p>
 
 <h1 id="panics" class='section-header'><a
                            href="#panics">Panics</a></h1>
 <p>If called w/o streaming.</p>
-</div><h4 id='method.stop' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.stop' class='fnname'>stop</a>(&amp;mut self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/old_io/type.IoResult.html' title='std::old_io::IoResult'>IoResult</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+</div><h4 id='method.stop' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.stop' class='fnname'>stop</a>(&amp;mut self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
 <div class='docblock'><p>Stop streaming.</p>
 
 <h1 id="panics" class='section-header'><a
