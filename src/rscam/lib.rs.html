@@ -542,19 +542,14 @@
 <span id="500">500</span>
 <span id="501">501</span>
 <span id="502">502</span>
-<span id="503">503</span>
-<span id="504">504</span>
-<span id="505">505</span>
-<span id="506">506</span>
-<span id="507">507</span>
 </pre><pre class='rust '>
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>libc</span>, <span class='ident'>core</span>, <span class='ident'>collections</span>, <span class='ident'>io_ext</span>, <span class='ident'>convert</span>)]</span>
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>unsafe_destructor</span>)]</span>
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>libc</span>, <span class='ident'>core</span>, <span class='ident'>collections</span>)]</span>
 
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>libc</span>;
 
-<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>io</span>, <span class='ident'>fmt</span>, <span class='ident'>str</span>, <span class='ident'>error</span>, <span class='ident'>default</span>, <span class='ident'>result</span>};
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>Fd</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>convert</span>::<span class='ident'>From</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>RawFd</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>io</span>, <span class='ident'>fmt</span>, <span class='ident'>str</span>, <span class='ident'>default</span>, <span class='ident'>result</span>};
 
 <span class='kw'>mod</span> <span class='ident'>v4l2</span>;
 
@@ -575,14 +570,14 @@
     <span class='ident'>BadField</span>
 }
 
-<span class='kw'>impl</span> <span class='ident'>error</span>::<span class='ident'>FromError</span><span class='op'>&lt;</span><span class='ident'>io</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Error</span> {
-    <span class='kw'>fn</span> <span class='ident'>from_error</span>(<span class='ident'>err</span>: <span class='ident'>io</span>::<span class='ident'>Error</span>) <span class='op'>-&gt;</span> <span class='ident'>Error</span> {
+<span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='ident'>io</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Error</span> {
+    <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>err</span>: <span class='ident'>io</span>::<span class='ident'>Error</span>) <span class='op'>-&gt;</span> <span class='ident'>Error</span> {
         <span class='ident'>Error</span>::<span class='ident'>Io</span>(<span class='ident'>err</span>)
     }
 }
 
 <span class='doccomment'>/// [Details](http://linuxtv.org/downloads/v4l-dvb-apis/field-order.html#v4l2-field).</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>, <span class='ident'>Clone</span>)]</span>
 <span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>Field</span> {
     <span class='prelude-val'>None</span> <span class='op'>=</span> <span class='number'>1</span>,
@@ -596,7 +591,6 @@
     <span class='ident'>InterplacedBT</span>
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Config</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
     <span class='doccomment'>/**
      * The mix of numerator and denominator. v4l2 uses frame intervals instead of frame rates.
@@ -748,15 +742,13 @@
     <span class='kw'>pub</span> <span class='ident'>resolution</span>: (<span class='ident'>u32</span>, <span class='ident'>u32</span>),
     <span class='doccomment'>/// FourCC of the format.</span>
     <span class='kw'>pub</span> <span class='ident'>format</span>: [<span class='ident'>u8</span>; <span class='number'>4</span>],
-    <span class='ident'>fd</span>: <span class='ident'>Fd</span>,
+    <span class='ident'>fd</span>: <span class='ident'>RawFd</span>,
     <span class='ident'>buffer</span>: <span class='ident'>v4l2</span>::<span class='ident'>Buffer</span>
 }
 
-<span class='attribute'>#[<span class='ident'>unsafe_destructor</span>]</span>
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>Drop</span> <span class='kw'>for</span> <span class='ident'>Frame</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
-    <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>unused_must_use</span>)]</span>
     <span class='kw'>fn</span> <span class='ident'>drop</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
-        <span class='ident'>v4l2</span>::<span class='ident'>xioctl</span>(<span class='self'>self</span>.<span class='ident'>fd</span>, <span class='ident'>v4l2</span>::<span class='ident'>VIDIOC_QBUF</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>.<span class='ident'>buffer</span>);
+        <span class='kw'>let</span> _ <span class='op'>=</span> <span class='ident'>v4l2</span>::<span class='ident'>xioctl</span>(<span class='self'>self</span>.<span class='ident'>fd</span>, <span class='ident'>v4l2</span>::<span class='ident'>VIDIOC_QBUF</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>.<span class='ident'>buffer</span>);
     }
 }
 
@@ -768,7 +760,7 @@
 }
 
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Camera</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
-    <span class='ident'>fd</span>: <span class='ident'>Fd</span>,
+    <span class='ident'>fd</span>: <span class='ident'>RawFd</span>,
     <span class='ident'>state</span>: <span class='ident'>State</span>,
     <span class='ident'>resolution</span>: (<span class='ident'>u32</span>, <span class='ident'>u32</span>),
     <span class='ident'>format</span>: [<span class='ident'>u8</span>; <span class='number'>4</span>],
@@ -1039,15 +1031,13 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>unsafe_destructor</span>]</span>
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>Drop</span> <span class='kw'>for</span> <span class='ident'>Camera</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
-    <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>unused_must_use</span>)]</span>
     <span class='kw'>fn</span> <span class='ident'>drop</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
         <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>state</span> <span class='op'>==</span> <span class='ident'>State</span>::<span class='ident'>Streaming</span> {
-            <span class='self'>self</span>.<span class='ident'>stop</span>();
+            <span class='kw'>let</span> _ <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>stop</span>();
         }
 
-        <span class='ident'>v4l2</span>::<span class='ident'>close</span>(<span class='self'>self</span>.<span class='ident'>fd</span>);
+        <span class='kw'>let</span> _ <span class='op'>=</span> <span class='ident'>v4l2</span>::<span class='ident'>close</span>(<span class='self'>self</span>.<span class='ident'>fd</span>);
     }
 }
 
