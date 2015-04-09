@@ -43,8 +43,30 @@
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>rscam</a><wbr></span><span class='out-of-band'><a href='stability.html'>[stability]</a> <span id='render-detail'>
             <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-0' href='../src/rscam/lib.rs.html#1-502'>[src]</a></span></h1>
-<h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+        </span><a id='src-0' href='../src/rscam/lib.rs.html#1-523'>[src]</a></span></h1>
+<div class='docblock'><p>Fast wrapper for v4l2.</p>
+<pre id='rust-example-rendered' class='rust '>
+<span class='kw'>use</span> <span class='ident'>rscam</span>::{<span class='ident'>Camera</span>, <span class='ident'>Config</span>};
+
+<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>camera</span> <span class='op'>=</span> <span class='ident'>Camera</span>::<span class='ident'>new</span>(<span class='string'>&quot;/dev/video0&quot;</span>).<span class='ident'>unwrap</span>();
+
+<span class='ident'>camera</span>.<span class='ident'>start</span>(<span class='kw-2'>&amp;</span><span class='ident'>Config</span> {
+    <span class='ident'>interval</span>: (<span class='number'>1</span>, <span class='number'>30</span>),      <span class='comment'>// 30 fps.</span>
+    <span class='ident'>resolution</span>: (<span class='number'>1280</span>, <span class='number'>720</span>),
+    <span class='ident'>format</span>: <span class='string'>b&quot;MJPG&quot;</span>,
+    ..<span class='ident'>Default</span>::<span class='ident'>default</span>()
+}).<span class='ident'>unwrap</span>();
+
+<span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>10</span> {
+    <span class='kw'>let</span> <span class='ident'>frame</span> <span class='op'>=</span> <span class='ident'>camera</span>.<span class='ident'>capture</span>().<span class='ident'>unwrap</span>();
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>file</span> <span class='op'>=</span> <span class='ident'>fs</span>::<span class='ident'>File</span>::<span class='ident'>create</span>(<span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;frame-{}.jpg&quot;</span>, <span class='ident'>i</span>)).<span class='ident'>unwrap</span>();
+    <span class='ident'>file</span>.<span class='ident'>write_all</span>(<span class='kw-2'>&amp;</span><span class='ident'>frame</span>[..]).<span class='ident'>unwrap</span>();
+}
+</pre>
+
+<p>The wrapper uses v4l2 (e.g. <code>v4l2_ioctl()</code> instead of <code>ioctl()</code>) until feature <code>no_wrapper</code> is
+enabled. The feature can be useful when it&#39;s desirable to avoid dependence on <em>libv4l2</em>.</p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                     <tr>
                         <td><a class='stability Unmarked' title='No stability level'></a><a class='struct' href='struct.Camera.html'

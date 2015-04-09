@@ -497,11 +497,15 @@
 <span id="455">455</span>
 <span id="456">456</span>
 <span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::<span class='ident'>CString</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>RawFd</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>usize</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>io</span>, <span class='ident'>raw</span>, <span class='ident'>mem</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ptr</span>::<span class='ident'>Unique</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>io</span>, <span class='ident'>mem</span>, <span class='ident'>usize</span>};
 
 <span class='comment'>// C types and constants.</span>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_void</span>, <span class='ident'>c_ulong</span>, <span class='ident'>size_t</span>, <span class='ident'>off_t</span>};
@@ -510,7 +514,7 @@
 <span class='kw'>use</span> <span class='ident'>libc</span>::<span class='ident'>consts</span>::<span class='ident'>os</span>::<span class='ident'>posix88</span>::{<span class='ident'>MAP_SHARED</span>};
 
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;use_wrapper&quot;</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;no_wrapper&quot;</span>))]</span>
 <span class='kw'>mod</span> <span class='ident'>ll</span> {
     <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>RawFd</span>;
     <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_void</span>, <span class='ident'>c_char</span>, <span class='ident'>c_int</span>, <span class='ident'>c_ulong</span>, <span class='ident'>size_t</span>, <span class='ident'>off_t</span>};
@@ -532,7 +536,7 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;use_wrapper&quot;</span>))]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;no_wrapper&quot;</span>)]</span>
 <span class='kw'>mod</span> <span class='ident'>ll</span> {
     <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>RawFd</span>;
     <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_void</span>, <span class='ident'>c_int</span>, <span class='ident'>c_ulong</span>};
@@ -588,21 +592,25 @@
     }
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>mmap</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='ident'>length</span>: <span class='ident'>usize</span>, <span class='ident'>fd</span>: <span class='ident'>RawFd</span>, <span class='ident'>offset</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> [<span class='ident'>u8</span>]<span class='op'>&gt;</span> {
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>MappedRegion</span> {
+    <span class='kw'>pub</span> <span class='ident'>ptr</span>: <span class='ident'>Unique</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span>,
+    <span class='kw'>pub</span> <span class='ident'>len</span>: <span class='ident'>usize</span>
+}
+
+<span class='kw'>impl</span> <span class='ident'>Drop</span> <span class='kw'>for</span> <span class='ident'>MappedRegion</span> {
+    <span class='kw'>fn</span> <span class='ident'>drop</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
+        <span class='kw'>unsafe</span> { <span class='ident'>ll</span>::<span class='ident'>munmap</span>(<span class='op'>*</span><span class='self'>self</span>.<span class='ident'>ptr</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>, <span class='self'>self</span>.<span class='ident'>len</span> <span class='kw'>as</span> <span class='ident'>size_t</span>); }
+    }
+}
+
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>mmap</span>(<span class='ident'>length</span>: <span class='ident'>usize</span>, <span class='ident'>fd</span>: <span class='ident'>RawFd</span>, <span class='ident'>offset</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>MappedRegion</span><span class='op'>&gt;</span> {
     <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>ll</span>::<span class='ident'>mmap</span>(<span class='number'>0</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>, <span class='ident'>length</span> <span class='kw'>as</span> <span class='ident'>size_t</span>, <span class='ident'>PROT_READ</span><span class='op'>|</span><span class='ident'>PROT_WRITE</span>,
                                  <span class='ident'>MAP_SHARED</span>, <span class='ident'>fd</span>, <span class='ident'>offset</span> <span class='kw'>as</span> <span class='ident'>off_t</span>)};
 
     <span class='macro'>check</span><span class='macro'>!</span>(<span class='ident'>ptr</span> <span class='kw'>as</span> <span class='ident'>usize</span> <span class='op'>!=</span> <span class='ident'>usize</span>::<span class='ident'>MAX</span>);
-    <span class='prelude-val'>Ok</span>(<span class='kw'>unsafe</span> { <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>raw</span>::<span class='ident'>Slice</span> { <span class='ident'>data</span>: <span class='ident'>ptr</span>, <span class='ident'>len</span>: <span class='ident'>length</span>}) })
-}
-
-<span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>trivial_casts</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>munmap</span>(<span class='ident'>region</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> [<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
-    <span class='macro'>check</span><span class='macro'>!</span>(<span class='kw'>unsafe</span> {
-        <span class='ident'>ll</span>::<span class='ident'>munmap</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>region</span>[<span class='number'>0</span>] <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>u8</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>, <span class='ident'>region</span>.<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>size_t</span>) <span class='op'>==</span> <span class='number'>0</span>
-    });
-
-    <span class='prelude-val'>Ok</span>(())
+    <span class='prelude-val'>Ok</span>(<span class='kw'>unsafe</span> {
+        <span class='ident'>MappedRegion</span> { <span class='ident'>ptr</span>: <span class='ident'>Unique</span>::<span class='ident'>new</span>(<span class='ident'>ptr</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>u8</span>), <span class='ident'>len</span>: <span class='ident'>length</span> }
+    })
 }
 
 <span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>C</span>)]</span>

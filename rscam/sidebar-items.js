@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Error",""],["Field","Details."],["IntervalInfo",""],["ResolutionInfo",""]],"type":[["Result",""]],"struct":[["Camera",""],["Config",""],["FormatInfo",""],["Frame",""]],"fn":[["new","Alias for `Camera::new()`."]]});
+initSidebarItems({"struct":[["Camera",""],["Config",""],["FormatInfo",""],["Frame",""]],"type":[["Result",""]],"enum":[["Error",""],["Field","Details."],["IntervalInfo",""],["ResolutionInfo",""]],"fn":[["new","Alias for `Camera::new()`."]]});
