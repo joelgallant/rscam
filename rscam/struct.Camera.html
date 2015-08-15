@@ -41,38 +41,48 @@
     </nav>
 
     <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>rscam</a>::<wbr><a class='struct' href=''>Camera</a><wbr></span><span class='out-of-band'><span id='render-detail'>
-            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-2203' href='../src/rscam/lib.rs.html#253-259'>[src]</a></span></h1>
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>rscam</a>::<wbr><a class='struct' href=''>Camera</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-5441' class='srclink' href='../src/rscam/lib.rs.html#265-271' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Camera {
     // some fields omitted
-}</pre><h2 id='methods'>Methods</h2><h3 class='impl'><a class='stability Unmarked' title='No stability level'></a><code>impl <a class='struct' href='../rscam/struct.Camera.html' title='rscam::Camera'>Camera</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.new' class='fnname'>new</a>(device: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='struct' href='../rscam/struct.Camera.html' title='rscam::Camera'>Camera</a>&gt;</code></h4>
-<h4 id='method.formats' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.formats' class='fnname'>formats</a>(&amp;self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../rscam/struct.FormatInfo.html' title='rscam::FormatInfo'>FormatInfo</a>&gt;&gt;</code></h4>
+}</pre><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../rscam/struct.Camera.html' title='rscam::Camera'>Camera</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(device: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='struct' href='../rscam/struct.Camera.html' title='rscam::Camera'>Camera</a>&gt;</code></h4>
+<h4 id='method.formats' class='method'><code>fn <a href='#method.formats' class='fnname'>formats</a>(&amp;self) -&gt; <a class='struct' href='../rscam/struct.FormatIter.html' title='rscam::FormatIter'>FormatIter</a></code></h4>
 <div class='docblock'><p>Get detailed info about the available formats.</p>
-</div><h4 id='method.resolutions' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.resolutions' class='fnname'>resolutions</a>(&amp;self, format: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='type' href='../rscam/type.Result.html' title='rscam::Result'>Result</a>&lt;<a class='enum' href='../rscam/enum.ResolutionInfo.html' title='rscam::ResolutionInfo'>ResolutionInfo</a>&gt;</code></h4>
+</div><h4 id='method.resolutions' class='method'><code>fn <a href='#method.resolutions' class='fnname'>resolutions</a>(&amp;self, format: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='type' href='../rscam/type.Result.html' title='rscam::Result'>Result</a>&lt;<a class='enum' href='../rscam/enum.ResolutionInfo.html' title='rscam::ResolutionInfo'>ResolutionInfo</a>&gt;</code></h4>
 <div class='docblock'><p>Get detailed info about the available resolutions.</p>
-</div><h4 id='method.intervals' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.intervals' class='fnname'>intervals</a>(&amp;self, format: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, resolution: <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</a>) -&gt; <a class='type' href='../rscam/type.Result.html' title='rscam::Result'>Result</a>&lt;<a class='enum' href='../rscam/enum.IntervalInfo.html' title='rscam::IntervalInfo'>IntervalInfo</a>&gt;</code></h4>
+</div><h4 id='method.intervals' class='method'><code>fn <a href='#method.intervals' class='fnname'>intervals</a>(&amp;self, format: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, resolution: <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</a>) -&gt; <a class='type' href='../rscam/type.Result.html' title='rscam::Result'>Result</a>&lt;<a class='enum' href='../rscam/enum.IntervalInfo.html' title='rscam::IntervalInfo'>IntervalInfo</a>&gt;</code></h4>
 <div class='docblock'><p>Get detailed info about the available intervals.</p>
-</div><h4 id='method.start' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.start' class='fnname'>start</a>(&amp;mut self, config: &amp;<a class='struct' href='../rscam/struct.Config.html' title='rscam::Config'>Config</a>) -&gt; <a class='type' href='../rscam/type.Result.html' title='rscam::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+</div><h4 id='method.controls' class='method'><code>fn <a href='#method.controls' class='fnname'>controls</a>(&amp;self) -&gt; <a class='struct' href='../rscam/struct.ControlIter.html' title='rscam::ControlIter'>ControlIter</a></code></h4>
+<div class='docblock'><p>Get info about all controls.</p>
+</div><h4 id='method.controls_by_class' class='method'><code>fn <a href='#method.controls_by_class' class='fnname'>controls_by_class</a>(&amp;self, class: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>) -&gt; <a class='struct' href='../rscam/struct.ControlIter.html' title='rscam::ControlIter'>ControlIter</a></code></h4>
+<div class='docblock'><p>Get info about available controls by class (see <code>CLASS_*</code> constants).</p>
+</div><h4 id='method.get_control' class='method'><code>fn <a href='#method.get_control' class='fnname'>get_control</a>(&amp;self, id: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='struct' href='../rscam/struct.Control.html' title='rscam::Control'>Control</a>&gt;</code></h4>
+<div class='docblock'><p>Get info about the control by id.</p>
+</div><h4 id='method.set_control' class='method'><code>fn <a href='#method.set_control' class='fnname'>set_control</a>&lt;T: <a class='trait' href='../rscam/trait.Settable.html' title='rscam::Settable'>Settable</a>&gt;(&amp;self, id: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, value: T) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+<div class='docblock'><p>Set value of the control.</p>
+</div><h4 id='method.start' class='method'><code>fn <a href='#method.start' class='fnname'>start</a>(&amp;mut self, config: &amp;<a class='struct' href='../rscam/struct.Config.html' title='rscam::Config'>Config</a>) -&gt; <a class='type' href='../rscam/type.Result.html' title='rscam::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
 <div class='docblock'><p>Start streaming.</p>
 
 <h1 id="panics" class='section-header'><a
                            href="#panics">Panics</a></h1>
 <p>If recalled or called after <code>stop()</code>.</p>
-</div><h4 id='method.capture' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.capture' class='fnname'>capture</a>(&amp;self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='struct' href='../rscam/struct.Frame.html' title='rscam::Frame'>Frame</a>&gt;</code></h4>
+</div><h4 id='method.capture' class='method'><code>fn <a href='#method.capture' class='fnname'>capture</a>(&amp;self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='struct' href='../rscam/struct.Frame.html' title='rscam::Frame'>Frame</a>&gt;</code></h4>
 <div class='docblock'><p>Blocking request of frame.
 It dequeues buffer from a driver, which will be enqueueed after destructing <code>Frame</code>.</p>
 
 <h1 id="panics" class='section-header'><a
                            href="#panics">Panics</a></h1>
 <p>If called w/o streaming.</p>
-</div><h4 id='method.stop' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.stop' class='fnname'>stop</a>(&amp;mut self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
+</div><h4 id='method.stop' class='method'><code>fn <a href='#method.stop' class='fnname'>stop</a>(&amp;mut self) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>&gt;</code></h4>
 <div class='docblock'><p>Stop streaming. Otherwise it&#39;s called after destructing <code>Camera</code>.</p>
 
 <h1 id="panics" class='section-header'><a
                            href="#panics">Panics</a></h1>
 <p>If called w/o streaming.</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Stable' title='Stable'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../rscam/struct.Camera.html' title='rscam::Camera'>Camera</a></code></h3><div class='impl-items'><h4 id='method.drop' class='method'><a class='stability Stable' title='Stable'></a><code>fn <a href='#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../rscam/struct.Camera.html' title='rscam::Camera'>Camera</a></code></h3><div class='impl-items'><h4 id='method.drop' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 
@@ -105,6 +115,10 @@ It dequeues buffer from a driver, which will be enqueueed after destructing <cod
                 <code>struct</code>, <code>enum</code>,
                 <code>trait</code>, <code>typedef</code> (or
                 <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
             </p>
         </div>
     </div>
