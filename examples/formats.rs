@@ -9,19 +9,15 @@ fn main() {
         let format = wformat.unwrap();
         println!("{:?}", format);
 
-        let resolutions = camera.resolutions(&format.format).unwrap();
-
-        if let ResolutionInfo::Discretes(d) = resolutions {
-            for resol in &d {
+        for resolution in camera.iter_resolutions(&format.format).unwrap() {
+            for interval in camera.iter_intervals(&format.format, resolution).unwrap() {
                 println!(
-                    "  {}x{}  {:?}",
-                    resol.0,
-                    resol.1,
-                    camera.intervals(&format.format, *resol).unwrap()
+                    "  {}x{}\t{}fps",
+                    resolution.0,
+                    resolution.1,
+                    interval.1 / interval.0,
                 );
             }
-        } else {
-            println!("  {:?}", resolutions);
         }
     }
 }

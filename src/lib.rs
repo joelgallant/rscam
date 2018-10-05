@@ -213,24 +213,20 @@ impl fmt::Debug for ResolutionInfo {
     }
 }
 
-pub enum IntervalIter {
+enum IntervalIter {
     Discretes(std::vec::IntoIter<(u32, u32)>),
-    Stepwise {
-        current: (u32, u32),
-        max: (u32, u32),
-        step: (u32, u32),
-    },
+    Stepwise(StepwiseIter),
 }
 
 impl From<ResolutionInfo> for IntervalIter {
     fn from(info: ResolutionInfo) -> Self {
         match info {
             ResolutionInfo::Discretes(vec) => IntervalIter::Discretes(vec.into_iter()),
-            ResolutionInfo::Stepwise { min, max, step } => IntervalIter::Stepwise {
+            ResolutionInfo::Stepwise { min, max, step } => IntervalIter::Stepwise(StepwiseIter {
                 current: min,
                 max,
                 step,
-            },
+            }),
         }
     }
 }
@@ -239,11 +235,11 @@ impl From<IntervalInfo> for IntervalIter {
     fn from(info: IntervalInfo) -> Self {
         match info {
             IntervalInfo::Discretes(vec) => IntervalIter::Discretes(vec.into_iter()),
-            IntervalInfo::Stepwise { min, max, step } => IntervalIter::Stepwise {
+            IntervalInfo::Stepwise { min, max, step } => IntervalIter::Stepwise(StepwiseIter {
                 current: min,
                 max,
                 step,
-            },
+            }),
         }
     }
 }
@@ -254,16 +250,31 @@ impl Iterator for IntervalIter {
     fn next(&mut self) -> Option<Self::Item> {
         match self {
             IntervalIter::Discretes(iter) => iter.next(),
-            IntervalIter::Stepwise { current, max, step } => {
-                // where
-                //   minw: 320, minh: 240
-                //   maxw: 640, maxh: 360
-                //
-                // { ∀k≥0,m≥0 | (min(320 + k*step.0, 640), min(240 + m*step.1, 360)) }
-
-                Some(*current)
-            }
+            IntervalIter::Stepwise(iter) => iter.next(),
         }
+    }
+}
+
+struct StepwiseIter {
+    current: (u32, u32),
+    max: (u32, u32),
+    step: (u32, u32),
+}
+
+impl Iterator for StepwiseIter {
+    type Item = (u32, u32);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        // where
+        //   minw: 320, minh: 240
+        //   maxw: 640, maxh: 360
+        //
+        // { ∀k≥0,m≥0 | (min(320 + k*step.0, 640), min(240 + m*step.1, 360)) }
+        let ret = self.current;
+
+        // TODO
+
+        Some(ret)
     }
 }
 
@@ -465,6 +476,7 @@ impl Camera {
         Ok(IntervalIter::from(self.intervals(format, resolution)?))
     }
 
+    // TODO: return impl Iterator
     /// Get info about all controls.
     pub fn controls(&self) -> ControlIter {
         ControlIter {
@@ -474,6 +486,7 @@ impl Camera {
         }
     }
 
+    // TODO: return impl Iterator
     /// Get info about available controls by class (see `CLASS_*` constants).
     pub fn controls_by_class(&self, class: u32) -> ControlIter {
         ControlIter {
