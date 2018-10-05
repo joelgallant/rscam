@@ -213,6 +213,60 @@ impl fmt::Debug for ResolutionInfo {
     }
 }
 
+pub enum IntervalIter {
+    Discretes(std::vec::IntoIter<(u32, u32)>),
+    Stepwise {
+        current: (u32, u32),
+        max: (u32, u32),
+        step: (u32, u32),
+    },
+}
+
+impl From<ResolutionInfo> for IntervalIter {
+    fn from(info: ResolutionInfo) -> Self {
+        match info {
+            ResolutionInfo::Discretes(vec) => IntervalIter::Discretes(vec.into_iter()),
+            ResolutionInfo::Stepwise { min, max, step } => IntervalIter::Stepwise {
+                current: min,
+                max,
+                step,
+            },
+        }
+    }
+}
+
+impl From<IntervalInfo> for IntervalIter {
+    fn from(info: IntervalInfo) -> Self {
+        match info {
+            IntervalInfo::Discretes(vec) => IntervalIter::Discretes(vec.into_iter()),
+            IntervalInfo::Stepwise { min, max, step } => IntervalIter::Stepwise {
+                current: min,
+                max,
+                step,
+            },
+        }
+    }
+}
+
+impl Iterator for IntervalIter {
+    type Item = (u32, u32);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match self {
+            IntervalIter::Discretes(iter) => iter.next(),
+            IntervalIter::Stepwise { current, max, step } => {
+                // where
+                //   minw: 320, minh: 240
+                //   maxw: 640, maxh: 360
+                //
+                // { ∀k≥0,m≥0 | (min(320 + k*step.0, 640), min(240 + m*step.1, 360)) }
+
+                Some(*current)
+            }
+        }
+    }
+}
+
 pub enum IntervalInfo {
     Discretes(Vec<(u32, u32)>),
     Stepwise {
@@ -306,6 +360,7 @@ impl Camera {
         })
     }
 
+    // TODO: return impl Iterator
     /// Get detailed info about the available formats.
     pub fn formats(&self) -> FormatIter {
         FormatIter {
@@ -353,6 +408,11 @@ impl Camera {
         }
     }
 
+    /// Get an iterator of possible resolutions.
+    pub fn iter_resolutions(&self, format: &[u8; 4]) -> Result<impl Iterator<Item = (u32, u32)>> {
+        Ok(IntervalIter::from(self.resolutions(format)?))
+    }
+
     /// Get detailed info about the available intervals.
     pub fn intervals(&self, format: &[u8], resolution: (u32, u32)) -> Result<IntervalInfo> {
         if format.len() != 4 {
@@ -394,6 +454,15 @@ impl Camera {
                 step: (sw.step.numerator, sw.step.denominator),
             })
         }
+    }
+
+    /// Get an iterator of possible intervals.
+    pub fn iter_intervals(
+        &self,
+        format: &[u8; 4],
+        resolution: (u32, u32),
+    ) -> Result<impl Iterator<Item = (u32, u32)>> {
+        Ok(IntervalIter::from(self.intervals(format, resolution)?))
     }
 
     /// Get info about all controls.
@@ -867,7 +936,8 @@ fn buffer_to_string(buf: &[u8]) -> String {
     String::from_utf8_lossy(match buf.iter().position(|&c| c == 0) {
         Some(x) => &buf[..x],
         None => buf,
-    }).into_owned()
+    })
+    .into_owned()
 }
 
 /// Alias for `Camera::new()`.
